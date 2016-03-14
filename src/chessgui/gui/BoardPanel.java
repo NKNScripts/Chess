@@ -12,7 +12,6 @@ import java.awt.*;
 
 /**
  * @author Christopher.Shafer
- *         <p/>
  *         TODO:
  *         Change board to 0x88 style.  Make board a 128 integer then bitmask it.
  */
@@ -30,6 +29,9 @@ public class BoardPanel extends JPanel {
         }
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
+                /*
+                   Line below creates new squares either white or black.  Calculates color based on if the square position is an even or odd
+                 */
                 squareButtons[i][j] = (i + j) % 2 == 0 ? new SquareButton(Color.WHITE) : new SquareButton(new Color(150, 150, 150));
                 squareButtons[i][j].setBitLocation((i * 16) + j);
                 squarePanel.add(squareButtons[i][j]);
@@ -54,12 +56,30 @@ public class BoardPanel extends JPanel {
         if((location & 0x88) != 0) {
             System.out.println("Illegal move");
         }
+
         piece.bitPiece.setBitLocation(location);
         for (SquareButton[] sqArr : squareButtons) {
             for (SquareButton s : sqArr)
                 if(s.getBitLocation() == location)
                     s.setPiece(piece);
         }
+    }
+
+    public boolean validMove(Piece piece, int location) {
+        int pieceType = piece.bitPiece.getPieceValue();
+        switch (Math.abs(pieceType)) {
+            case 1: {
+                if(((location & 0x88) == 0)) {
+                    int difference = Math.abs(location - piece.bitPiece.getBitLocation());
+                    if(difference == 1) return true;
+                    else if(difference == 16) return true;
+                }
+            }
+            case 2: {
+
+            }
+        }
+        return false;
     }
 
 
