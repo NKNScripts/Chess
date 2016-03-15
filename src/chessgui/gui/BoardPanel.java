@@ -33,7 +33,8 @@ public class BoardPanel extends JPanel {
                    Line below creates new squares either white or black.  Calculates color based on if the square position is an even or odd
                  */
                 squareButtons[i][j] = (i + j) % 2 == 0 ? new SquareButton(Color.WHITE) : new SquareButton(new Color(150, 150, 150));
-                squareButtons[i][j].setBitLocation((i * 16) + j);
+                squareButtons[i][j].setBitLocation(((7 - i) * 16) + j);
+                //squareButtons[i][j].setText(Integer.toString(squareButtons[i][j].getBitLocation()));
                 squarePanel.add(squareButtons[i][j]);
             }
         }
@@ -47,12 +48,12 @@ public class BoardPanel extends JPanel {
         movePiece(new Piece(-2, 18), 7);
         movePiece(new Piece(-3, 19), 16);
         movePiece(new Piece(-4, 20), 17);
-        movePiece(new Piece(-5, 19), 18);
+        movePiece(new Piece(-5, 19), 117);
         movePiece(new Piece(-6, 20), 19);
         this.add(squarePanel);
     }
 
-    private void movePiece(Piece piece, int location) {
+    public void movePiece(Piece piece, int location) {
         if((location & 0x88) != 0) {
             System.out.println("Illegal move");
         }
@@ -68,16 +69,31 @@ public class BoardPanel extends JPanel {
     public boolean validMove(Piece piece, int location) {
         int pieceType = piece.bitPiece.getPieceValue();
         switch (Math.abs(pieceType)) {
-            case 1: {
+            case 5: {
                 if(((location & 0x88) == 0)) {
-                    int difference = Math.abs(location - piece.bitPiece.getBitLocation());
-                    if(difference == 1) return true;
-                    else if(difference == 16) return true;
+
+                    int difference = location - piece.bitPiece.getBitLocation();
+                    System.out.println(difference);
+                    if(pieceType > 0) {
+                        if(difference == 16 || (pieceAt(location) && (difference == 15 || difference == 17))) //If moving straight, or can capture a piece
+                            return true;
+                    } else if(difference == -16 || (pieceAt(location) && (difference == -15 || difference == -17))) //If moving straight, or can capture a piece
+                        return true;
+
                 }
             }
             case 2: {
 
             }
+        }
+        return false;
+    }
+
+    private boolean pieceAt(int location) {
+        for (SquareButton[] sqArr : squareButtons) {
+            for (SquareButton s : sqArr)
+                if(s.getBitLocation() == location)
+                    return s.getPiece() != null;
         }
         return false;
     }

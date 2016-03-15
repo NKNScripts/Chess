@@ -1,6 +1,7 @@
 package chessgui.framework.board;
 
 import chessgui.framework.pieces.Piece;
+import chessgui.gui.BoardPanel;
 import chessgui.gui.SquareButton;
 
 import javax.swing.*;
@@ -42,12 +43,21 @@ public class SquareMouseListener implements MouseListener {
         if(selected) {
             Container container = ((JComponent) e.getSource()).getParent();
             Point mousePosition = container.getMousePosition();
+            if(mousePosition == null) {
+                selected = false;
+                return;
+            }
             SquareButton destination = (SquareButton) container.getComponentAt(mousePosition);
             if(destination != startSquareButton) {
-                destination.setPiece(selectedPiece);
-                startSquareButton.setPiece(null);
-                startSquareButton = null;
-                colorTurn = !colorTurn;
+                BoardPanel panel = (BoardPanel) ((JComponent) e.getSource()).getParent().getParent();
+                if(panel.validMove(selectedPiece, destination.getBitLocation())) {
+                    panel.movePiece(selectedPiece, destination.getBitLocation());
+                    startSquareButton.setPiece(null);
+                    startSquareButton = null;
+                    colorTurn = !colorTurn;
+                }
+
+
             }
 
 
