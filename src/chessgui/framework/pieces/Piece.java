@@ -10,7 +10,6 @@ import chessgui.framework.board.BitPiece;
  * @author Christopher.Shafer
  */
 public class Piece {
-    public static final int SINGLE = 1, SLIDE = 2, DIAGONAL = 4, LPATTERN = 8, ISPAWN = 16;
     public String icon;
     public BitPiece bitPiece;
 
