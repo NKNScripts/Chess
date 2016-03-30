@@ -4,6 +4,7 @@
  */
 package chessgui.gui;
 
+import chessgui.framework.pieces.MoveType;
 import chessgui.framework.pieces.Piece;
 
 import javax.swing.*;
@@ -19,7 +20,7 @@ import java.awt.*;
 public class BoardPanel extends JPanel {
 
     public static JPanel squarePanel = new JPanel(new GridLayout(8, 8));
-    private SquareButton[][] squareButtons = new SquareButton[8][8];
+    public static SquareButton[][] squareButtons = new SquareButton[8][8];
     private Piece[] pieces = new Piece[12];
     private int[] board = new int[128];
 
@@ -67,35 +68,8 @@ public class BoardPanel extends JPanel {
     }
 
     public boolean validMove(Piece piece, int location) {
-        int pieceType = piece.bitPiece.getPieceValue();
-        switch (Math.abs(pieceType)) {
-            case 5: {
-                if(((location & 0x88) == 0)) {
 
-                    int difference = location - piece.bitPiece.getBitLocation();
-                    System.out.println(difference);
-                    if(pieceType > 0) {
-                        if(difference == 16 || (pieceAt(location) && (difference == 15 || difference == 17))) //If moving straight, or can capture a piece
-                            return true;
-                    } else if(difference == -16 || (pieceAt(location) && (difference == -15 || difference == -17))) //If moving straight, or can capture a piece
-                        return true;
-
-                }
-            }
-            case 2: {
-
-            }
-        }
-        return false;
-    }
-
-    private boolean pieceAt(int location) {
-        for (SquareButton[] sqArr : squareButtons) {
-            for (SquareButton s : sqArr)
-                if(s.getBitLocation() == location)
-                    return s.getPiece() != null;
-        }
-        return false;
+        return MoveType.INSTANCE.validMove(piece, location);
     }
 
 
