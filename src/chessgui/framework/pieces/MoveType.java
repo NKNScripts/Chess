@@ -22,8 +22,27 @@ public class MoveType {
         return false;
     }
 
+    private boolean colorPieceAt(int location, boolean white) {
+        for (SquareButton[] sqArr : BoardPanel.squareButtons) {
+            for (SquareButton s : sqArr)
+                if(s.getBitLocation() == location && s.getPiece() != null) {
+                    if(white)
+                        return s.getPiece().bitPiece.getPieceValue() > 0;
+                    else
+                        return s.getPiece().bitPiece.getPieceValue() < 0;
+                }
+
+
+        }
+        return false;
+    }
+
     public boolean validMove(Piece piece, int location) {
         MOVE_TYPE type = piece.getType();
+        boolean white = piece.bitPiece.getPieceValue() > 0;
+        if(white) {
+            if(colorPieceAt(location, true)) return false;
+        } else if(colorPieceAt(location, false)) return false;
         int pieceLocation = piece.getBitPiece().getBitLocation();
         int difference = location - pieceLocation;
         switch (type) {
@@ -31,8 +50,11 @@ public class MoveType {
                 if(pieceAt(location) && (difference == -15 || difference == -17))
                     return true;
                 for (int i : type.getValidMoves())
-                    if(difference == i)
+                    if(difference == i) {
+                        System.out.println("Here");
                         return true;
+                    }
+                return false;
             }
             case WHITE_PAWN: {
                 if(pieceAt(location) && (difference == 15 || difference == 17))
@@ -40,21 +62,95 @@ public class MoveType {
                 for (int i : type.getValidMoves())
                     if(difference == i)
                         return true;
+                return false;
             }
             case QUEEN: {
                 for (int i : type.getValidMoves()) {
-                    if(location % i == 0) {
-                        int jump = location - i;
+                    if(i == 1) {
+                        if(Math.abs(location - pieceLocation) > 6) {
+                            return false;
+                        }
+                    }
+                    if((location - pieceLocation) % i == 0) {
+                        int jump;
+                        if(location - pieceLocation > 0)
+                            jump = location - i;
+                        else
+                            jump = location + i;
+
                         while (jump != pieceLocation) {
                             if(pieceAt(jump)) return false;
-                            jump -= i;
+                            if(location - pieceLocation > 0)
+                                jump -= i;
+                            else
+                                jump += i;
+                        }
+                        return true;
+                    }
+                }
+                return false;
+
+            }
+            case KING: {
+                for (int i : type.getValidMoves()) {
+                    System.out.println(i + "  " + difference);
+                    if(difference == i || -difference == i) return true;
+                }
+
+                return false;
+
+            }
+            case ROOK: {
+                for (int i : type.getValidMoves()) {
+                    if(i == 1) {
+                        if(Math.abs(location - pieceLocation) > 6) {
+                            return false;
+                        }
+                    }
+                    if((location - pieceLocation) % i == 0) {
+                        int jump;
+                        if(location - pieceLocation > 0)
+                            jump = location - i;
+                        else
+                            jump = location + i;
+
+                        while (jump != pieceLocation) {
+                            if(pieceAt(jump)) return false;
+                            if(location - pieceLocation > 0)
+                                jump -= i;
+                            else
+                                jump += i;
                         }
                         return true;
                     }
                 }
 
+                return false;
+
             }
-            
+            case BISHOP: {
+                for (int i : type.getValidMoves()) {
+                    if(location % i == 0) {
+                        int jump;
+                        if(location - pieceLocation > 0)
+                            jump = location - i;
+                        else
+                            jump = location + i;
+
+                        while (jump != pieceLocation) {
+                            if(pieceAt(jump)) return false;
+                            if(location - pieceLocation > 0)
+                                jump -= i;
+                            else
+                                jump += i;
+                        }
+                        return true;
+                    }
+                }
+                return false;
+
+            }
+
         }
 
         return false;
