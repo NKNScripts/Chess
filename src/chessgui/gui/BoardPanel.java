@@ -39,24 +39,54 @@ public class BoardPanel extends JPanel {
                 squarePanel.add(squareButtons[i][j]);
             }
         }
-        movePiece(new Piece(1, 1), 0);
-        movePiece(new Piece(2, 2), 1);
-        movePiece(new Piece(3, 3), 2);
-        movePiece(new Piece(4, 4), 3);
-        movePiece(new Piece(5, 6), 4);
-        movePiece(new Piece(6, 7), 5);
-        movePiece(new Piece(-1, 17), 6);
-        movePiece(new Piece(-2, 18), 7);
-        movePiece(new Piece(-3, 19), 16);
-        movePiece(new Piece(-4, 20), 17);
-        movePiece(new Piece(-5, 19), 117);
-        movePiece(new Piece(-6, 20), 19);
+        newGame();
         this.add(squarePanel);
+    }
+
+    public void newGame() {
+        for (SquareButton[] sqArr : squareButtons) {
+            for (SquareButton s : sqArr)
+                s.setPiece(null);
+        }
+        movePiece(new Piece(2, 4), 0);
+        movePiece(new Piece(4, 2), 1);
+        movePiece(new Piece(3, 3), 2);
+        movePiece(new Piece(1, 4), 3);
+        movePiece(new Piece(6, 6), 4);
+        movePiece(new Piece(3, 7), 5);
+        movePiece(new Piece(4, 4), 6);
+        movePiece(new Piece(2, 18), 7);
+        movePiece(new Piece(5, 5), 16);
+        movePiece(new Piece(5, 5), 17);
+        movePiece(new Piece(5, 5), 18);
+        movePiece(new Piece(5, 5), 19);
+        movePiece(new Piece(5, 5), 20);
+        movePiece(new Piece(5, 5), 21);
+        movePiece(new Piece(5, 5), 22);
+        movePiece(new Piece(5, 5), 23);
+        movePiece(new Piece(-2, 4), 112);
+        movePiece(new Piece(-4, 2), 113);
+        movePiece(new Piece(-3, 3), 114);
+        movePiece(new Piece(-1, 4), 115);
+        movePiece(new Piece(-6, 6), 116);
+        movePiece(new Piece(-3, 7), 117);
+        movePiece(new Piece(-4, 4), 118);
+        movePiece(new Piece(-2, 18), 119);
+        movePiece(new Piece(-5, 5), 96);
+        movePiece(new Piece(-5, 5), 97);
+        movePiece(new Piece(-5, 5), 98);
+        movePiece(new Piece(-5, 5), 99);
+        movePiece(new Piece(-5, 5), 100);
+        movePiece(new Piece(-5, 5), 101);
+        movePiece(new Piece(-5, 5), 102);
+        movePiece(new Piece(-5, 5), 103);
     }
 
     public void movePiece(Piece piece, int location) {
         if((location & 0x88) != 0) {
+            System.out.println(location);
             System.out.println("Illegal move");
+            return;
         }
 
         piece.bitPiece.setBitLocation(location);

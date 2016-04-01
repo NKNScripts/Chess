@@ -52,6 +52,7 @@ public class SquareMouseListener implements MouseListener {
                 BoardPanel panel = (BoardPanel) ((JComponent) e.getSource()).getParent().getParent();
                 if(panel.validMove(selectedPiece, destination.getBitLocation())) {
                     panel.movePiece(selectedPiece, destination.getBitLocation());
+                    selectedPiece.firstMove = false;
                     startSquareButton.setPiece(null);
                     startSquareButton = null;
                     colorTurn = !colorTurn;

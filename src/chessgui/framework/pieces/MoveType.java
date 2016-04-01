@@ -13,30 +13,6 @@ public class MoveType {
 
     private MoveType() {}
 
-    private boolean pieceAt(int location) {
-        for (SquareButton[] sqArr : BoardPanel.squareButtons) {
-            for (SquareButton s : sqArr)
-                if(s.getBitLocation() == location)
-                    return s.getPiece() != null;
-        }
-        return false;
-    }
-
-    private boolean colorPieceAt(int location, boolean white) {
-        for (SquareButton[] sqArr : BoardPanel.squareButtons) {
-            for (SquareButton s : sqArr)
-                if(s.getBitLocation() == location && s.getPiece() != null) {
-                    if(white)
-                        return s.getPiece().bitPiece.getPieceValue() > 0;
-                    else
-                        return s.getPiece().bitPiece.getPieceValue() < 0;
-                }
-
-
-        }
-        return false;
-    }
-
     public boolean validMove(Piece piece, int location) {
         MOVE_TYPE type = piece.getType();
         boolean white = piece.bitPiece.getPieceValue() > 0;
@@ -51,8 +27,7 @@ public class MoveType {
                     return true;
                 for (int i : type.getValidMoves())
                     if(difference == i) {
-                        System.out.println("Here");
-                        return true;
+                        return !(i == -32 && !piece.firstMove) && !pieceAt(location);
                     }
                 return false;
             }
@@ -60,8 +35,9 @@ public class MoveType {
                 if(pieceAt(location) && (difference == 15 || difference == 17))
                     return true;
                 for (int i : type.getValidMoves())
-                    if(difference == i)
-                        return true;
+                    if(difference == i) {
+                        return !(i == 32 && !piece.firstMove) && !pieceAt(location);
+                    }
                 return false;
             }
             case QUEEN: {
@@ -100,6 +76,15 @@ public class MoveType {
                 return false;
 
             }
+            case KNIGHT: {
+                for (int i : type.getValidMoves()) {
+                    System.out.println(i + "  " + difference);
+                    if(difference == i || -difference == i) return true;
+                }
+
+                return false;
+
+            }
             case ROOK: {
                 for (int i : type.getValidMoves()) {
                     if(i == 1) {
@@ -130,7 +115,12 @@ public class MoveType {
             }
             case BISHOP: {
                 for (int i : type.getValidMoves()) {
-                    if(location % i == 0) {
+                    if(i == 1) {
+                        if(Math.abs(location - pieceLocation) > 6) {
+                            return false;
+                        }
+                    }
+                    if((location - pieceLocation) % i == 0) {
                         int jump;
                         if(location - pieceLocation > 0)
                             jump = location - i;
@@ -156,9 +146,33 @@ public class MoveType {
         return false;
     }
 
+    private boolean colorPieceAt(int location, boolean white) {
+        for (SquareButton[] sqArr : BoardPanel.squareButtons) {
+            for (SquareButton s : sqArr)
+                if(s.getBitLocation() == location && s.getPiece() != null) {
+                    if(white)
+                        return s.getPiece().bitPiece.getPieceValue() > 0;
+                    else
+                        return s.getPiece().bitPiece.getPieceValue() < 0;
+                }
+
+
+        }
+        return false;
+    }
+
+    private boolean pieceAt(int location) {
+        for (SquareButton[] sqArr : BoardPanel.squareButtons) {
+            for (SquareButton s : sqArr)
+                if(s.getBitLocation() == location)
+                    return s.getPiece() != null;
+        }
+        return false;
+    }
+
     public enum MOVE_TYPE {
-        BLACK_PAWN(new int[]{-16}, true, true),
-        WHITE_PAWN(new int[]{16}, true, true),
+        BLACK_PAWN(new int[]{-16, -32}, true, true),
+        WHITE_PAWN(new int[]{16, 32}, true, true),
         KING(new int[]{15, 16, 17, 1}, true),
         QUEEN(new int[]{15, 16, 17, 1}, false),
         BISHOP(new int[]{15, 17}, false),

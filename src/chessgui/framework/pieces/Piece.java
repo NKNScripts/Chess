@@ -13,6 +13,7 @@ public class Piece {
     public String icon;
     public BitPiece bitPiece;
     public MoveType.MOVE_TYPE type;
+    public boolean firstMove = true;
 
 
     public Piece(int pieceType, int location) {
