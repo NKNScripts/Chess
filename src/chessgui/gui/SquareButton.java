@@ -11,7 +11,7 @@ import java.awt.*;
  */
 public class SquareButton extends JButton {
     private Piece piece = null;
-    private Font font = new Font("Bitstream Cyberbit", Font.PLAIN, 64);
+    private Font font = new Font("Bitstream Cyberbit", Font.PLAIN, 60);
     private int bitLocation;
 
 

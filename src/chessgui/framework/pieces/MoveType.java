@@ -3,6 +3,9 @@ package chessgui.framework.pieces;
 import chessgui.gui.BoardPanel;
 import chessgui.gui.SquareButton;
 
+import javax.swing.*;
+import java.awt.*;
+
 /**
  * Created by Christopher.Shafer on 3/16/2016.
  */
@@ -13,7 +16,69 @@ public class MoveType {
 
     private MoveType() {}
 
+    public void clearSquares() {
+        for (SquareButton[] a : BoardPanel.squareButtons)
+            for (SquareButton s : a)
+                s.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+    }
+
+    public void showValidMoves(Piece piece) {
+        MOVE_TYPE type = piece.getType();
+        switch (type) {
+            case WHITE_PAWN: {
+                if(validMove(piece, piece.getBitPiece().getBitLocation() + 32)) {
+                    SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() + 32);
+                    if(b != null)
+                        b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GREEN));
+                }
+                for (int i = 15; i <= 17; i++) {
+                    if(validMove(piece, piece.getBitPiece().getBitLocation() + i)) {
+                        SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() + i);
+                        if(b != null)
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GREEN));
+                    }
+                }
+                break;
+            }
+            case BLACK_PAWN: {
+                if(validMove(piece, piece.getBitPiece().getBitLocation() + -32)) {
+                    SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() - 32);
+                    if(b != null)
+                        b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GREEN));
+                }
+                for (int i = 15; i <= 17; i++) {
+                    if(validMove(piece, piece.getBitPiece().getBitLocation() - i)) {
+                        SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() - i);
+                        if(b != null)
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GREEN));
+                    }
+                }
+                break;
+            }
+
+            case QUEEN: {
+                for (int i : type.getValidMoves()) {
+                    int holder = piece.getBitPiece().getBitLocation();
+                    while (validMove(piece, holder + i)) {
+                        SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() + i);
+                        if(b != null)
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GREEN));
+                        holder = holder + i;
+                    }
+                    holder = piece.getBitPiece().getBitLocation();
+                    while (validMove(piece, holder - i)) {
+                        SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() + i);
+                        if(b != null)
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GREEN));
+                        holder = holder - i;
+                    }
+                }
+            }
+        }
+    }
+
     public boolean validMove(Piece piece, int location) {
+        if((location & 0x88) != 0) return false;
         MOVE_TYPE type = piece.getType();
         boolean white = piece.bitPiece.getPieceValue() > 0;
         if(white) {
@@ -27,7 +92,11 @@ public class MoveType {
                     return true;
                 for (int i : type.getValidMoves())
                     if(difference == i) {
-                        return !(i == -32 && !piece.firstMove) && !pieceAt(location);
+                        if(i == -32) {
+                            if(!piece.firstMove) continue;
+                            return !pieceAt(location) && !pieceAt(location + 16);
+                        }
+                        return !pieceAt(location);
                     }
                 return false;
             }
@@ -36,7 +105,11 @@ public class MoveType {
                     return true;
                 for (int i : type.getValidMoves())
                     if(difference == i) {
-                        return !(i == 32 && !piece.firstMove) && !pieceAt(location);
+                        if(i == 32) {
+                            if(!piece.firstMove) continue;
+                            return !pieceAt(location) && !pieceAt(location - 16);
+                        }
+                        return !pieceAt(location);
                     }
                 return false;
             }

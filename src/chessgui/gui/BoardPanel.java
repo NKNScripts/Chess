@@ -44,6 +44,7 @@ public class BoardPanel extends JPanel {
     }
 
     public void newGame() {
+        MoveType.INSTANCE.clearSquares();
         for (SquareButton[] sqArr : squareButtons) {
             for (SquareButton s : sqArr)
                 s.setPiece(null);
@@ -95,6 +96,14 @@ public class BoardPanel extends JPanel {
                 if(s.getBitLocation() == location)
                     s.setPiece(piece);
         }
+    }
+
+    public static SquareButton findButtonLocation(int location) {
+        for (SquareButton[] a : squareButtons)
+            for (SquareButton s : a)
+                if(s.getBitLocation() == location)
+                    return s;
+        return null;
     }
 
     public boolean validMove(Piece piece, int location) {

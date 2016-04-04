@@ -1,5 +1,6 @@
 package chessgui.framework.board;
 
+import chessgui.framework.pieces.MoveType;
 import chessgui.framework.pieces.Piece;
 import chessgui.gui.BoardPanel;
 import chessgui.gui.SquareButton;
@@ -35,11 +36,13 @@ public class SquareMouseListener implements MouseListener {
         if(selectedPiece != null && selectedPiece.getBitPiece().getPieceValue() < 0 == colorTurn) {
             selected = true;
             startSquareButton = (SquareButton) e.getSource();
+            MoveType.INSTANCE.showValidMoves(selectedPiece);
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        MoveType.INSTANCE.clearSquares();
         if(selected) {
             Container container = ((JComponent) e.getSource()).getParent();
             Point mousePosition = container.getMousePosition();
