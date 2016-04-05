@@ -16,6 +16,7 @@ public class MoveType {
 
     private MoveType() {}
 
+
     public void clearSquares() {
         for (SquareButton[] a : BoardPanel.squareButtons)
             for (SquareButton s : a)
@@ -29,13 +30,13 @@ public class MoveType {
                 if(validMove(piece, piece.getBitPiece().getBitLocation() + 32)) {
                     SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() + 32);
                     if(b != null)
-                        b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GREEN));
+                        b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
                 }
                 for (int i = 15; i <= 17; i++) {
                     if(validMove(piece, piece.getBitPiece().getBitLocation() + i)) {
                         SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() + i);
                         if(b != null)
-                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GREEN));
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
                     }
                 }
                 break;
@@ -44,14 +45,31 @@ public class MoveType {
                 if(validMove(piece, piece.getBitPiece().getBitLocation() + -32)) {
                     SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() - 32);
                     if(b != null)
-                        b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GREEN));
+                        b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
                 }
                 for (int i = 15; i <= 17; i++) {
                     if(validMove(piece, piece.getBitPiece().getBitLocation() - i)) {
                         SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() - i);
                         if(b != null)
-                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GREEN));
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
                     }
+                }
+                break;
+            }
+
+            case KING: {
+                for (int i : type.getValidMoves()) {
+                    if(validMove(piece, piece.getBitPiece().getBitLocation() + i)) {
+                        SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() + i);
+                        if(b != null)
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
+                    }
+                    if(validMove(piece, piece.getBitPiece().getBitLocation() - i)) {
+                        SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() - i);
+                        if(b != null)
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
+                    }
+
                 }
                 break;
             }
@@ -60,19 +78,80 @@ public class MoveType {
                 for (int i : type.getValidMoves()) {
                     int holder = piece.getBitPiece().getBitLocation();
                     while (validMove(piece, holder + i)) {
-                        SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() + i);
+                        SquareButton b = BoardPanel.findButtonLocation(holder + i);
                         if(b != null)
-                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GREEN));
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
                         holder = holder + i;
                     }
                     holder = piece.getBitPiece().getBitLocation();
                     while (validMove(piece, holder - i)) {
-                        SquareButton b = BoardPanel.findButtonLocation(piece.getBitPiece().getBitLocation() + i);
+                        SquareButton b = BoardPanel.findButtonLocation(holder - i);
                         if(b != null)
-                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.GREEN));
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
                         holder = holder - i;
                     }
                 }
+                break;
+            }
+
+            case ROOK: {
+                for (int i : type.getValidMoves()) {
+                    int holder = piece.getBitPiece().getBitLocation();
+                    while (validMove(piece, holder + i)) {
+                        SquareButton b = BoardPanel.findButtonLocation(holder + i);
+                        if(b != null)
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
+                        holder = holder + i;
+                    }
+                    holder = piece.getBitPiece().getBitLocation();
+                    while (validMove(piece, holder - i)) {
+                        SquareButton b = BoardPanel.findButtonLocation(holder - i);
+                        if(b != null)
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
+                        holder = holder - i;
+                    }
+                }
+                break;
+            }
+
+            case BISHOP: {
+                for (int i : type.getValidMoves()) {
+                    int holder = piece.getBitPiece().getBitLocation();
+                    while (validMove(piece, holder + i)) {
+                        SquareButton b = BoardPanel.findButtonLocation(holder + i);
+                        if(b != null)
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
+                        holder = holder + i;
+                    }
+                    holder = piece.getBitPiece().getBitLocation();
+                    while (validMove(piece, holder - i)) {
+                        SquareButton b = BoardPanel.findButtonLocation(holder - i);
+                        if(b != null)
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
+                        holder = holder - i;
+                    }
+                }
+                break;
+            }
+
+            case KNIGHT: {
+                for (int i : type.getValidMoves()) {
+                    int holder = piece.getBitPiece().getBitLocation();
+                    while (validMove(piece, holder + i)) {
+                        SquareButton b = BoardPanel.findButtonLocation(holder + i);
+                        if(b != null)
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
+                        holder = holder + i;
+                    }
+                    holder = piece.getBitPiece().getBitLocation();
+                    while (validMove(piece, holder - i)) {
+                        SquareButton b = BoardPanel.findButtonLocation(holder - i);
+                        if(b != null)
+                            b.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 200, 0)));
+                        holder = holder - i;
+                    }
+                }
+                break;
             }
         }
     }
